@@ -1,0 +1,24 @@
+Package: openEndedAnalyzeR
+Title: Tidy analysis of open-ended survey question responses
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Chris",
+           family = "Umphlett",
+           role = c("aut", "cre"),
+           email = "christopher.umphlett@gmail.com")
+Description: Applies tidy text mining to many columns of free response survey
+    data. The core functionality is to facilitate an inexperienced text miner
+    getting quickly into text mining from a data frame. A variety of analyses
+    and visualizations are then available, taking advantage of various methods
+    and packages that are available for text mining. These packages do not 
+    share common syntax, and this approach allows one to quickly use them.
+Depends: R (>= 2.10), dplyr, magrittr, tibble
+License: CC0
+Encoding: UTF-8
+LazyData: true
+Imports:
+    tidytext,
+    textdata,
+    wordcloud,
+    RColorBrewer
+RoxygenNote: 6.1.1
