@@ -5,6 +5,8 @@
 #' used directly.
 #'
 #' @param data Data frame with the unnested phrases
+#' @import dplyr
+#' @import magrittr
 
 create_phrasefreq <- function(data) {
 

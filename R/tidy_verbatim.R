@@ -14,6 +14,10 @@
 #' @param cols List of column(s) to be unnested
 #' @param n Length of phrases, in words
 #' @return A data frame with one row per phrase and column, with survey id.
+#' @import dplyr
+#' @import magrittr
+#' @import tidytext
+#' @import tibble
 #' @export
 #' @examples
 #' data(bloom_survey)

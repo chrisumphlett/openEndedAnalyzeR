@@ -21,6 +21,9 @@
 #' @param max_phrases Maximum number of phrases to show in phrasecloud
 #' @param remove_stop Do you want to remove common "stop-words"? Applies only to
 #' single-word phrases ("unigrams"). If so, use TRUE
+#' @import dplyr
+#' @import tidytext
+#' @import magrittr
 #' @export
 
 create_phraseclouds <- function(data,
