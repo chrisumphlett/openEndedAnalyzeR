@@ -10,9 +10,10 @@
 #' list with other functions in the package.
 #'
 #' @param data Data frame with the survey data
-#' @param id Unique survey id
-#' @param cols List of column(s) to be unnested
-#' @param n Length of phrases, in words
+#' @param id Unique survey id. By default, can be omitted if column is named 'id'
+#' @param cols List of column(s) to be unnested. By default, can be omitted if 
+#' using vector named 'selected_cols'
+#' @param n Length of phrases, in words. By default is 1 (unigrams)
 #' @return A data frame with one row per phrase and column, with survey id.
 #' @import dplyr
 #' @import magrittr

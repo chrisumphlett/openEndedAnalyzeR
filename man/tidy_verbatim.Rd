@@ -9,11 +9,12 @@ tidy_verbatim(data, id = id, cols = selected_cols, n = 1)
 \arguments{
 \item{data}{Data frame with the survey data}
 
-\item{id}{Unique survey id}
+\item{id}{Unique survey id. By default, can be omitted if column is named 'id'}
 
-\item{cols}{List of column(s) to be unnested}
+\item{cols}{List of column(s) to be unnested. By default, can be omitted if 
+using vector named 'selected_cols'}
 
-\item{n}{Length of phrases, in words}
+\item{n}{Length of phrases, in words. By default is 1 (unigrams)}
 }
 \value{
 A data frame with one row per phrase and column, with survey id.

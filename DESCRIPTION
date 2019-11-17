@@ -21,6 +21,7 @@ Imports:
     magrittr,
     tidytext,
     tibble,
+    tidyr,
     textdata,
     wordcloud,
     RColorBrewer
