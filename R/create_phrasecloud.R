@@ -39,9 +39,9 @@ create_phraseclouds <- function(data,
   # if unigrams, will remove stop phrases
   if (remove_stop == TRUE){
     phrase_freq <- phrase_freq %>%
-      dplyr::filter(!phrase %in% stop_words$word, phrase_freq >= min_occur)
+      dplyr::filter(!phrase %in% tidytext::stop_words$word, phrase_freq >= min_occur)
   }
-
+  
   for (column_i in cols) {
     phrase_freq2 <- dplyr::filter(phrase_freq, column_nm == {{column_i}})
 
