@@ -23,7 +23,7 @@
 #' single-word phrases ("unigrams"). If so, use TRUE
 #' @import dplyr
 #' @import tidytext
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @export
 
 create_phraseclouds <- function(data,

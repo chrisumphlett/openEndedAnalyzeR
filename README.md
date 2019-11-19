@@ -3,6 +3,9 @@ Tidy analysis of open-ended survey question responses
 
 The package is being built to make it easy to do generalized forms of analysis that I have found useful for open ended survey responses. The workflow one should be able to utilize with the help of the package is to call one function to prepare the data, and then a second function to do an analysis and get an output (visualization or data frame).
 
+## Installation
+You can install the current version by using `devtools::install_github("chrisumphlett/openEndedAnalyzeR")`.
+
 ## What is available now
 The first version of the package has one analysis function: `create_phraseclouds()`. This allows the user to make wordclouds easily not only for single words, but for phrases of length 'n' words ("n-grams").
 

@@ -16,43 +16,44 @@
 #'
 #' @param tidy_data Data frame with the unnested phrases (usually from tidy_verbatim())
 #' @import dplyr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @import tidytext
 #' @import textdata
 #' @import tidyr
+#' @export
 
 response_sentiment <- function(tidy_data) {
   
   afinn_by_survey <- {{tidy_data}} %>%
-    left_join(get_sentiments("afinn"), by = c("phrase" = "word")) %>%
-    filter(!is.na(value)) %>%
-    rename(sentiment = value) %>%
-    group_by(id, column_nm) %>%
-    summarise(afinn_sentiment_index = sum(sentiment)) %>%
-    ungroup()
+    dplyr::left_join(tidytext::get_sentiments("afinn"), by = c("phrase" = "word")) %>%
+    dplyr::filter(!is.na(value)) %>%
+    dplyr::rename(sentiment = value) %>%
+    dplyr::group_by(id, column_nm) %>%
+    dplyr::summarise(afinn_sentiment_index = sum(sentiment)) %>%
+    dplyr::ungroup()
   
   bing_by_survey <- {{tidy_data}} %>%
-    left_join(get_sentiments("bing"), by = c("phrase" = "word")) %>%
-    filter(!is.na(sentiment)) %>%
-    group_by(id, column_nm, sentiment) %>%
-    summarise(sentiment_count = n()) %>%
-    ungroup() %>%
-    spread(sentiment, sentiment_count, fill = 0) %>%
-    mutate(bing_sentiment_score = positive - negative) %>%
-    select(-c(negative, positive))
+    dplyr::left_join(tidytext::get_sentiments("bing"), by = c("phrase" = "word")) %>%
+    dplyr::filter(!is.na(sentiment)) %>%
+    dplyr::group_by(id, column_nm, sentiment) %>%
+    dplyr::summarise(sentiment_count = n()) %>%
+    dplyr::ungroup() %>%
+    tidyr::spread(sentiment, sentiment_count, fill = 0) %>%
+    dplyr::mutate(bing_sentiment_score = positive - negative) %>%
+    dplyr::select(-c(negative, positive))
   
   nrc_by_survey <- {{tidy_data}} %>%
-    left_join(get_sentiments("nrc"), by = c("phrase" = "word")) %>%
-    filter(!is.na(sentiment)) %>%
-    rename(nrc = sentiment) %>%
-    group_by(id, column_nm, nrc) %>%
-    summarise(sentiment_count = n()) %>%
-    ungroup() %>%
-    spread(nrc, sentiment_count, fill = 0, sep = "_")
+    dplyr::left_join(tidytext::get_sentiments("nrc"), by = c("phrase" = "word")) %>%
+    dplyr::filter(!is.na(sentiment)) %>%
+    dplyr::rename(nrc = sentiment) %>%
+    dplyr::group_by(id, column_nm, nrc) %>%
+    dplyr::summarise(sentiment_count = n()) %>%
+    dplyr::ungroup() %>%
+    tidyr::spread(nrc, sentiment_count, fill = 0, sep = "_")
   
   sentiment_by_survey <- afinn_by_survey %>%
-    left_join(bing_by_survey) %>%
-    left_join(nrc_by_survey)
+    dplyr::left_join(bing_by_survey) %>%
+    dplyr::left_join(nrc_by_survey)
   
   return(sentiment_by_survey)
 }

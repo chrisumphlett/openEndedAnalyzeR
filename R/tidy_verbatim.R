@@ -16,7 +16,7 @@
 #' @param n Length of phrases, in words. By default is 1 (unigrams)
 #' @return A data frame with one row per phrase and column, with survey id.
 #' @import dplyr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @import tidytext
 #' @import tibble
 #' @export

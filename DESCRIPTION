@@ -24,5 +24,7 @@ Imports:
     tidyr,
     textdata,
     wordcloud,
+    ggplot2,
+    scales,
     RColorBrewer
 RoxygenNote: 6.1.1
