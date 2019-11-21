@@ -29,7 +29,7 @@ plot_response_sentiment <- function(data) {
     ggplot2::facet_grid(column_nm ~ sentiment, space = "free_y", scales = "free_y") +
     ggplot2::scale_x_continuous(breaks = scales::pretty_breaks()) +
     ggplot2::theme_classic() +
-    ggplot2::labs(x = "Number of times sentiment appears in a survey response",
+    ggplot2::labs(x = "Number of times NRC sentiment appears in a survey response",
          y = "",
          title = "Count of survey responses that include sentiment, by frequency") +
     ggplot2::theme(panel.grid.major.y = element_line(color = "grey", size = 0.5)) +
