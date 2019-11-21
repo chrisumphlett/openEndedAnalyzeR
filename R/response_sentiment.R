@@ -42,18 +42,18 @@ response_sentiment <- function(tidy_data) {
   #   dplyr::mutate(bing_sentiment_score = positive - negative) %>%
   #   dplyr::select(-c(negative, positive))
   
-  nrc_by_survey <- {{tidy_data}} %>%
-    dplyr::left_join(tidytext::get_sentiments("nrc"), by = c("phrase" = "word")) %>%
-    dplyr::filter(!is.na(sentiment)) %>%
-    dplyr::rename(nrc = sentiment) %>%
-    dplyr::group_by(id, column_nm, nrc) %>%
-    dplyr::summarise(sentiment_count = n()) %>%
-    dplyr::ungroup() %>%
-    tidyr::spread(nrc, sentiment_count, fill = 0, sep = "_")
-  
-  sentiment_by_survey <- afinn_by_survey %>%
-    # dplyr::left_join(bing_by_survey) %>%
-    dplyr::left_join(nrc_by_survey)
+  # nrc_by_survey <- {{tidy_data}} %>%
+  #   dplyr::left_join(tidytext::get_sentiments("nrc"), by = c("phrase" = "word")) %>%
+  #   dplyr::filter(!is.na(sentiment)) %>%
+  #   dplyr::rename(nrc = sentiment) %>%
+  #   dplyr::group_by(id, column_nm, nrc) %>%
+  #   dplyr::summarise(sentiment_count = n()) %>%
+  #   dplyr::ungroup() %>%
+  #   tidyr::spread(nrc, sentiment_count, fill = 0, sep = "_")
+  # 
+  # sentiment_by_survey <- afinn_by_survey %>%
+  #   # dplyr::left_join(bing_by_survey) %>%
+  #   dplyr::left_join(nrc_by_survey)
   
   return(sentiment_by_survey)
 }
