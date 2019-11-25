@@ -76,7 +76,7 @@ quantify_verbatim <- function(surveydata,
     cxi_lm_f <- lm(lm_formula, data = col_lm)
     
     cxi_lm_f2 <- broom::tidy(cxi_lm_f) %>%
-      dplyr::mutate(term = str_replace_all(term, "`", ""))
+      dplyr::mutate(term = stringr::str_replace_all(term, "`", ""))
 
     # analyze and plot significant phrases
 
@@ -97,7 +97,7 @@ quantify_verbatim <- function(surveydata,
       dplyr::filter(dplyr::row_number() <= max(min({{max_phrases}}, pval01_count), {{min_phrases}})) %>%
       dplyr::mutate(low_est = estimate - std.error,
              high_est = estimate + std.error,
-             term2 = str_replace_all(term, "phrase_", ""),
+             term2 = stringr::str_replace_all(term, "phrase_", ""),
              `Meets pval threshold` = if_else(p.value <= {{pval_limit}}, "Yes", "No")) %>%
       dplyr::select(estimate, low_est, high_est, term2, p.value)
 
