@@ -14,7 +14,7 @@
 #' The summarized values will represent the count of words assigned to each sentiment
 #' on the response and question level.
 #'
-#' @param tidy_data Data frame with the unnested phrases (usually from tidy_verbatim())
+#' @param tidydata Data frame with the unnested phrases (usually from tidy_verbatim())
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @import tidytext
@@ -22,9 +22,9 @@
 #' @import tidyr
 #' @export
 
-response_sentiment <- function(tidy_data) {
+response_sentiment <- function(tidydata) {
   
-  # afinn_by_survey <- {{tidy_data}} %>%
+  # afinn_by_survey <- {{tidydata}} %>%
   #   dplyr::left_join(tidytext::get_sentiments("afinn"), by = c("phrase" = "word")) %>%
   #   dplyr::filter(!is.na(value)) %>%
   #   dplyr::rename(sentiment = value) %>%
@@ -32,7 +32,7 @@ response_sentiment <- function(tidy_data) {
   #   dplyr::summarise(afinn_sentiment_index = sum(sentiment)) %>%
   #   dplyr::ungroup()
   
-  # bing_by_survey <- {{tidy_data}} %>%
+  # bing_by_survey <- {{tidydata}} %>%
   #   dplyr::left_join(tidytext::get_sentiments("bing"), by = c("phrase" = "word")) %>%
   #   dplyr::filter(!is.na(sentiment)) %>%
   #   dplyr::group_by(id, column_nm, sentiment) %>%
@@ -42,7 +42,7 @@ response_sentiment <- function(tidy_data) {
   #   dplyr::mutate(bing_sentiment_score = positive - negative) %>%
   #   dplyr::select(-c(negative, positive))
   
-  nrc_by_survey <- {{tidy_data}} %>%
+  nrc_by_survey <- {{tidydata}} %>%
     dplyr::left_join(tidytext::get_sentiments("nrc"), by = c("phrase" = "word")) %>%
     dplyr::filter(!is.na(sentiment)) %>%
     dplyr::rename(nrc = sentiment) %>%

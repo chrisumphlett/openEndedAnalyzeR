@@ -14,6 +14,7 @@ The first version of the package had one analysis function: `create_phraseclouds
 I have now added additional functions: 
 * `response_sentiment`: Assign sentiments to single words
 * `plot_response_sentiment`: Creates plots to do explatory analysis on the sentiment of single words
+* `quantify_verbatim`: Regress phrases on a quantitative variable from survey and produce a plot showing the associated change in quantitative if a particular phrase is used in the verbatim
 
 ## What I am working on
 I already have several features I plan on adding where I have performed the analysis outside the package and just need to convert it a form suitable for the package. These include:

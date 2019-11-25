@@ -27,6 +27,7 @@
 
 tidy_verbatim <- function(data, id = id, cols = selected_cols, n = 1) {
   x <- {{data}} %>%
+    rename(id = {{id}}) %>%
     dplyr::select(id, cols) %>%
     dplyr::mutate(id = as.character(id))
 

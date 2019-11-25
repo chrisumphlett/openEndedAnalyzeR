@@ -4,10 +4,10 @@
 \alias{response_sentiment}
 \title{Assign sentiments to unigrams using nrc, afinn and bing dictionaries}
 \usage{
-response_sentiment(tidy_data)
+response_sentiment(tidydata)
 }
 \arguments{
-\item{tidy_data}{Data frame with the unnested phrases (usually from tidy_verbatim())}
+\item{tidydata}{Data frame with the unnested phrases (usually from tidy_verbatim())}
 }
 \description{
 Creates data frame with one row per survey, selected question, and summarized 

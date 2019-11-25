@@ -26,5 +26,8 @@ Imports:
     wordcloud,
     ggplot2,
     scales,
-    RColorBrewer
+    RColorBrewer,
+    broom,
+    glue,
+    fastDummies
 RoxygenNote: 6.1.1
