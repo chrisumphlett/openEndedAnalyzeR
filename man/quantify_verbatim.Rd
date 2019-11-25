@@ -2,7 +2,7 @@
 % Please edit documentation in R/quantify_verbatim.R
 \name{quantify_verbatim}
 \alias{quantify_verbatim}
-\title{Creates exploratory plots of the assignment of sentiments to words}
+\title{Regress phrases on a quantitative variable from survey and produce plot}
 \usage{
 quantify_verbatim(surveydata, tidydata, id = id, quant_var,
   min_occur = 3, min_phrases = 25, max_phrases = 80,
@@ -33,11 +33,7 @@ control variables in regression}
 single-word phrases ("unigrams"). If so, use TRUE}
 }
 \description{
-Creates and prints ggplots showing how the sentiment assignment works.
-One or more plots can be displayed depending on the user preference.
-}
-\details{
-The first plot, "sentiment_histogram", shows a histogram for each sentiment
-and question. It shows the distribution of the sentiment by the frequency
-of occurences
+Regresses phrases on a quantitative variable from survey and produces a plot 
+showing the associated change in quantitative if a particular phrase is used 
+in the verbatim.
 }

@@ -1,11 +1,8 @@
-#' Creates exploratory plots of the assignment of sentiments to words
-#'
-#' Creates and prints ggplots showing how the sentiment assignment works.
-#' One or more plots can be displayed depending on the user preference.
+#' Regress phrases on a quantitative variable from survey and produce plot
 #' 
-#' The first plot, "sentiment_histogram", shows a histogram for each sentiment
-#' and question. It shows the distribution of the sentiment by the frequency
-#' of occurences
+#' Regresses phrases on a quantitative variable from survey and produces a plot 
+#' showing the associated change in quantitative if a particular phrase is used 
+#' in the verbatim.
 #'
 #' @param surveydata Data frame with the survey data
 #' @param tidydata Data frame with the unnested phrases (usually from tidy_verbatim())
@@ -23,9 +20,11 @@
 #' @import dplyr
 #' @importFrom magrittr "%>%"
 #' @import ggplot2
+#' @import textdata
 #' @importFrom broom "tidy"
 #' @importFrom glue "glue"
 #' @importFrom fastDummies "dummy_cols"
+#' @importFrom stringr "str_replace_all"
 #' @import tidytext
 #' @export
 
@@ -39,6 +38,7 @@ quantify_verbatim <- function(surveydata,
                                 pval_limit = 0.1,
                                 xreg = c(),
                                 remove_stop = TRUE) {
+  
   phrase_freq <- create_phrasefreq({{tidydata}})
   
   # if unigrams, will remove stop phrases

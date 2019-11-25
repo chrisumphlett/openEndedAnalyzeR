@@ -24,4 +24,8 @@ Bing index represents the count of positive words minus count of negative words.
 The NRC dictionary assigns words to one of several sentiments, such as anger or joy.
 The summarized values will represent the count of words assigned to each sentiment
 on the response and question level.
+
+The first time you run this function, if you have never used the sentiment 
+lexicons in other work, you will be prompted to accept the license and download
+the lexicon to your pc.
 }

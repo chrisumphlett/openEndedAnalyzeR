@@ -29,5 +29,6 @@ Imports:
     RColorBrewer,
     broom,
     glue,
-    fastDummies
+    fastDummies,
+    stringr
 RoxygenNote: 6.1.1
