@@ -13,13 +13,14 @@
 #' @import tidyr
 #' @import ggplot2
 #' @import scales
+#' @importFrom stringr "str_replace"
 #' @export
 
 plot_response_sentiment <- function(data) {
   sentiment_long <- {{data}} %>%
     tidyr::gather(sentiment, value, -id, -column_nm) %>%
     dplyr::filter(!is.na(value)) %>%
-    dplyr::mutate(sentiment = str_replace(sentiment, "nrc_", ""))
+    dplyr::mutate(sentiment = stringr::str_replace(sentiment, "nrc_", ""))
   
   ggplot(subset(sentiment_long, !sentiment %in% c("afinn_sentiment_index",
                                      "bing_sentiment_score",
