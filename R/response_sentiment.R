@@ -43,7 +43,7 @@ response_sentiment <- function(tidydata) {
   
   bing_by_survey <- {{tidydata}} %>%
     # dplyr::left_join(tidytext::get_sentiments("bing"), by = c("phrase" = "word")) %>%
-    dplyr::left_join(bing_afinn, by = c("phrase" = "word")) %>%
+    dplyr::left_join(lex_bing, by = c("phrase" = "word")) %>%
     dplyr::filter(!is.na(sentiment)) %>%
     dplyr::group_by(id, column_nm, sentiment) %>%
     dplyr::summarise(sentiment_count = n()) %>%
@@ -54,7 +54,7 @@ response_sentiment <- function(tidydata) {
   
   nrc_by_survey <- {{tidydata}} %>%
     # dplyr::left_join(tidytext::get_sentiments("nrc"), by = c("phrase" = "word")) %>%
-    dplyr::left_join(nrc_afinn, by = c("phrase" = "word")) %>%
+    dplyr::left_join(lex_nrc, by = c("phrase" = "word")) %>%
     dplyr::filter(!is.na(sentiment)) %>%
     dplyr::rename(nrc = sentiment) %>%
     dplyr::group_by(id, column_nm, nrc) %>%
