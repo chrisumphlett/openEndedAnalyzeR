@@ -31,4 +31,6 @@ Imports:
     glue,
     fastDummies,
     stringr
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 RoxygenNote: 6.1.1

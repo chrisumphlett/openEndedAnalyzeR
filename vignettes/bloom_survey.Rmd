@@ -1,0 +1,202 @@
+---
+title: "Introduction to openEndedAnalyzeR"
+author: "Chris Umphlett"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{Introduction to openEndedAnalyzeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, collapse = TRUE)
+library(openEndedAnalyzeR)
+library(tidyverse)
+```
+
+`openEndedAnalyzeR` enables fast, pre-packaged analysis of qualitative survey responses ("open-ended" or "verbatims"). It is built on the framework of the `tidytext` package. It combines `tidytext` functionality for text mining with `tidyverse` data manipulation to lower the barrier of entry to text mining for beginning R users.
+
+## Usage
+
+The package contains three types of functions:
+
+1. Tidying: These functions prepare the survey data for analysis. You should always start an analysis with `tidy_verbatim()`, turning the survey responses into a tidy bag-of-phrases.
+1. Pre-packaged analysis: As analysis methods are identified that may be useful in more than one context, and can be generalized, functions will be created to enable others to create canned analysis outputs. At the launch of the package two methods were available: `create_phraseclouds()` and `quantify_verbatim()`.
+1. Intermediate analysis prep: These functions apply additional processing to the tidy data before being utilized for analysis (pre-packaged, or customized by the user). Presently this is the `response_sentiment()` function.
+
+## Suggested workflow
+
+One should always start with `tidy_verbatim()` to obtain a tidy bag-of-phrases. Bag-of-words is a text mining term meaning that a body of text is turned into a list of all of the words in the text. I use the term bag-of-phrases because `tidy_verbatim()` allows the user to specify the number of words in each phrase (also known as an *n-gram*).
+
+For users with more advanced R skills or need to perform a very custom analysis, they may stop at this point and write their own code. Otherwise the next step is to pass the `tidy_verbatim()` output into one of the analysis functions. 
+
+This is not necessarily a linear process. `openEndedAnalyzeR` does create report-worthy visuals but is also helpful for exploratory analysis. You might start with uni-grams (single words), do analysis, and then desire to see more context for particular words. Then you would start over, creating a bag-of-phrases with tri-grams (three words), repeating the analysis. 
+
+
+## Example analysis on Bloomington, IN Community Survey data
+
+This vignette will analyze the `bloom_survey` data frame included with the package. This data frame contains responses to a survey that the city of Bloomington, IN conducted in 2017. It contains mostly quantitative questions with two qualitative questions at the end: What is the thing you like the least/most about Bloomington? The vignette will demonstrate the package's functions on these two questions. 
+
+Here is a preview of the data, with unnecessary columns removed and columns re-named:
+
+```{r bloom_survey_eda}
+bloom_survey2 <- bloom_survey %>% 
+  mutate(id = as.character(id)) %>%
+  select(id, q3a, q3b, q19, q20, q19verb, q20verb) %>%
+  rename(recommend_living = q3a, remain_five_years = q3b, like_least_code = q19, like_most_code = q20, like_least_verb = q19verb, like_most_verb = q20verb)
+
+
+head(bloom_survey2)
+```
+
+
+### Create tidy bag-of-phrases
+
+I create unigram and trigram phrases here, and summarize the top six phrases by count. Stop words are not yet removed for the unigrams and so only useless words are shown. The analysis functions will remove the stop words (or allow the user to choose to leave them).
+
+The function automatically removes blank survey responses (which would be `NA`). In the case of this data a string "na" was already in the data which forced me to filter it out.
+
+``` {r tidy_verbatims}
+selected_cols <- c("like_least_verb", "like_most_verb")
+tidy_verbatims1 <- tidy_verbatim(bloom_survey2, n = 1) %>%
+  filter(phrase != "na")
+head(tidy_verbatims1)
+tidy_verbatims1 %>% group_by(phrase) %>% summarise(phrase_count = n()) %>% arrange(-phrase_count) %>% head
+
+tidy_verbatims3 <- tidy_verbatim(bloom_survey2, n = 3)
+head(tidy_verbatims3)
+tidy_verbatims3 %>% group_by(phrase) %>% summarise(phrase_count = n()) %>% arrange(-phrase_count) %>% head
+```
+
+### Looking for topics with phrase clouds
+
+The two questions from this survey were coded by researchers and put into groups. How well can we identify broad topics using the package without manually reading the responses? The `create_phraseclouds()` function counts the frequency of phrases and produces a phrasecloud. It includes several parameters to allow you to control the size of the cloud (eg, top x% of phrases, max # of phrases, min # of phrases). Reasonable defaults are used if nothing is changed.
+
+After creating phrase clouds for each question, and n-gram, I have briefly reviewed the visual and noted topics that emerge.
+
+**NOTE**: RStudio will often give warnings when creating wordclouds because the plot area is not large enough to display everything. Within this code chunk I have set the height and width of plots to 10 inches. **Pay attention to the warnings when you run this function!** Ultimately the easiest way to make sure you get everything is to write the wordcloud out to an external file and give it plenty of space.
+
+#### Tri-gram cloud topics
+
+``` {r phraseclouds3, fig.height = 10, fig.width = 10}
+create_phraseclouds(tidy_verbatims3, max_phrases = 50)
+```
+
+**Least like**
+
+* Housing options
+* Parking
+* Recycling
+
+**Most like**
+
+* Small-town feel/sense of community/friendliness
+* Outdoor activities (parks, trails)
+* Quality of life related
+* Diversity
+* Entertainment options
+
+#### Unigram cloud topics
+
+``` {r phraseclouds1, fig.height = 10, fig.width = 10}
+create_phraseclouds(tidy_verbatims1, max_phrases = 50)
+```
+
+**Least like** (new information in *italics*)
+
+* Housing options
+* Parking
+* Recycling
+* *Homelessness*
+* *Public safety*
+* *Transportation issues*
+* *Job opportunities*
+* *Presence of university*
+
+**Most like**
+
+* Small-town feel/sense of community/friendliness
+* Outdoor activities (parks, trails)
+* Quality of life related
+* Diversity
+* Entertainment options
+* *Presence of university*
+
+#### How does this compare to the researchers' manual analysis?
+
+Per the report prepared by National Research Center Inc, the verbatims were all analyzed and coded into topics. If a response spanned more than one topic the researchers assigned it to the first one mentioned (p63 of the [NRC report](https://catalog.data.gov/dataset/community-survey/resource/d66aa529-90c0-4f05-a65f-75f9090cb2bb)). The plots below show the topics created and count of surveys each was assigned to:
+
+```{r manual_coding, echo=FALSE}
+coded_verbatims <- tibble::tribble(~question, ~topic_group, ~n,
+  "19: What do you like least", "Homelessness", 92,
+  "19: What do you like least", "Affordable housing/built environment", 79,
+  "19: What do you like least", "Infrastructure (roads/sidewalks)", 32,
+  "19: What do you like least", "Economic vitality", 41,
+  "19: What do you like least", "Traffic, mobility and parking", 109,
+  "19: What do you like least", "Safety and health services", 34,
+  "19: What do you like least", "Politics and government trust", 33,
+  "19: What do you like least", "Environmental concerns", 41,
+  "19: What do you like least", "Other", 37,
+  "19: What do you like least", "Don't know/not applicable",  6,
+  "20: What do you like most", "Cultural activities and entertainment", 136,
+  "20: What do you like most", "Parks and natural environment", 67,
+  "20: What do you like most", "Sense of community", 82,
+  "20: What do you like most", "Diversity/inclusivity", 56,
+  "20: What do you like most", "Image/appearance", 38,
+  "20: What do you like most", "Accessibility/mobility", 50,
+  "20: What do you like most", "Access to university/educational opportunities", 32,
+  "20: What do you like most", "Quality of life and services", 28,
+  "20: What do you like most", "Other", 16,
+  "20: What do you like most", "Don't know/not applicable", 3
+  )
+
+ggplot(coded_verbatims) +
+  facet_wrap(question ~ ., nrow = 2, scales = "free_y") +
+  geom_bar(aes(y = n, x = reorder(topic_group, n), fill = question), stat = "identity") +
+  coord_flip() +
+  theme_classic() +
+  labs(title = "",
+       x = "",
+       y = "Count of responses coded into topic") +
+  scale_y_continuous(breaks = c(0, 25, 50, 75, 100, 125)) +
+  theme(legend.position = "none")
+
+```
+
+
+I identified eight topics in the least like question and six in the most like question. The researchers identified eight in each, excluding Other and Don't know. They grouped the responses differently and made the categories more specific, probably at least in part due to knowing more about the full context of each response.
+
+That said, my review of the phrase clouds yielded a rough equivalent for at least six of the topics in each question.
+
+If one wanted to classify each response into a topic, this could be used as a starting point for at least two different methods:
+
+* Unsupervised clustering: Utilize six/four as the k in k-modes clustering. The tidy data would need to be tranposed and turned into dummies so that the data was structured as one row per survey, one column per phrase. This is done easily with the `tidyr` and `fastDummies` packages.
+* Supervised classification: Using these topics create a case_when argument to classify responses that have one of the most-common phrases from the cloud. Responses with these phrases will be used to train the model to classify responses without these phrases. Any response where the predicted probabilities are all below a threshold (for example, if none of the topics have a probability over 0.5) would be placed into an "Other" topic.
+
+### Quantify verbatims
+
+Many surveys, including the Bloomington community survey, combine quantitative and qualitative questions. When verbatims are utilized to allow a customer to help explain why they gave a particular numeric response the analyst has to sort through many responses and look for common themes related to good/bad numeric scores.
+
+The `quantify_verbatim()` function aims to help with this. It performs a regression of all unique n-grams in a qualitative response on the numeric scores of a quantitative question.
+
+This should be used, and interpreted, carefully. **Spurious associations will likely be identified if you just start throwing random combinations of questions against the wall!** 
+
+The Bloomington data is not a great example for this. The way they split into two questions, what thing do you like least/most, already allows one to understand the direction of the association. For example, with "recycling" showing up frequently in the least liked question, we know that something related to recycling is a negative for the city's residents. 
+
+Consider this as a limited demonstration of how the function works, and the output it produces but not necessarily a scenario in which it should be used. 
+
+A question about one's likelihood to recommend that others live in Bloomington is used as the quantitative response, with the likelihood one will stay living in Bloomington for five years as an optional regressor. The response options are on what is to me a strange scale: 1 to 4, with 1 as very likely and 4 as very unlikely; and 5 representing Don't know. For this reason I converted the 5's to 2.5 to try and place them more in a more reasonable place on a continuous scale.
+
+Coefficient estimates and intervals colored red have a statistical significance below an alpha of 0.1. Then as the points get lighter the p-values get further from alpha.
+
+``` {r quantify}
+adjusted_verbatim <- bloom_survey2 %>%
+  mutate(recommend_living = if_else(recommend_living == 5, 2.5, recommend_living),
+         remain_five_years = if_else(remain_five_years == 5, 2.5, remain_five_years))
+
+quantify_verbatim(adjusted_verbatim, tidy_verbatims3, quant_var = "recommend_living", xreg = c("remain_five_years"))
+```
