@@ -15,7 +15,8 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, collapse = TRUE)
 library(openEndedAnalyzeR)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 `openEndedAnalyzeR` enables fast, pre-packaged analysis of qualitative survey responses ("open-ended" or "verbatims"). It is built on the framework of the `tidytext` package. It combines `tidytext` functionality for text mining with `tidyverse` data manipulation to lower the barrier of entry to text mining for beginning R users.
