@@ -7,6 +7,7 @@
 #' @param data Data frame with the unnested phrases
 #' @import dplyr
 #' @importFrom magrittr "%>%"
+#' @noRd
 
 create_phrasefreq <- function(data) {
 
